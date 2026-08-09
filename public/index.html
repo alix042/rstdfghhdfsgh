@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXTdosyayükleme | ekonqt</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="theme-cyan">
+
+  <!-- Interactive Matrix Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="grid-overlay"></div>
+  <div class="scanlines-overlay"></div>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    
+    <!-- Top Header Bar -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="logo-box">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">NEXT<span>dosyayükleme</span></h1>
+          <p class="brand-credit"><i class="fa-solid fa-code"></i> ekonqt tarafından yapılmıştır</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Spectators & Ping Badge -->
+        <div class="live-metrics">
+          <span class="metric-item" title="Aktif İzleyici"><i class="fa-solid fa-users text-primary"></i> <span id="visitor-count">4</span> Kişi</span>
+          <span class="metric-item" title="Sunucu Gecikmesi"><i class="fa-solid fa-bolt text-warning"></i> <span id="ping-val">16ms</span></span>
+          <span class="metric-item" title="Kare Hızı"><i class="fa-solid fa-desktop text-success"></i> <span id="fps-val">60 FPS</span></span>
+        </div>
+
+        <!-- Sound Audio Toggle Button -->
+        <button id="sound-toggle-btn" class="btn-icon" title="Ses Efektlerini Aç/Kapat">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+
+        <!-- Status Pill -->
+        <div id="status-pill" class="status-pill status-not-ready">
+          <span class="status-dot"></span>
+          <span class="status-text">HARİTA TESLİMİNE: <strong>HAZIR DEĞİL</strong></span>
+        </div>
+
+        <!-- Admin Button -->
+        <button id="open-admin-btn" class="btn-admin" title="Admin Paneli">
+          <i class="fa-solid fa-user-shield"></i> Admin
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Card -->
+    <main class="main-content">
+      
+      <!-- STAGE 1: Image Showcase & Technical Fake Loader -->
+      <section id="stage-images" class="stage-card">
+        <div class="stage-header">
+          <div class="stage-header-top">
+            <div class="stage-badge"><i class="fa-solid fa-microchip"></i> TEKNİK VERİ DOĞRULAMASI</div>
+            <span class="inspection-step-counter">Görsel <strong id="current-photo-num">1</strong> / 10</span>
+          </div>
+          <h2>Roblox Harita Revize Fotoğrafları & Teknik Yükleme</h2>
+          <p class="stage-desc">Haritaya ait 10 adet yüksek çözünürlüklü revize görseli 25 saniyelik teknik güvenlik, poligon ve doku taramasından geçirilmektedir.</p>
+        </div>
+
+        <!-- Image Navigation Tabs -->
+        <div class="image-tabs" id="image-tabs-container">
+          <!-- JS generates 10 tab buttons here -->
+        </div>
+
+        <!-- Active Image View & Loader Card -->
+        <div class="image-inspection-container">
+          <div class="image-wrapper-box" id="image-wrapper-box">
+            <div class="image-wrapper" id="image-wrapper">
+              <img id="current-inspection-img" src="https://picsum.photos/seed/roblox_map_1/900/500" alt="Roblox Harita Görseli">
+              
+              <!-- Zoom Button -->
+              <button id="zoom-img-btn" class="zoom-btn" title="Büyüt ve İncele">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> Tam Ekran
+              </button>
+
+              <!-- Loading Overlay (Shown during 25-second fake loading) -->
+              <div id="image-loader-overlay" class="loader-overlay active">
+                <div class="spinner-box">
+                  <div class="hex-spinner"></div>
+                  <div class="spinner-core"><i class="fa-solid fa-layer-group"></i></div>
+                </div>
+                <div class="loader-info">
+                  <span id="tech-step-badge" class="tech-step-badge">SERİ NO #1 YÜKLENİYOR</span>
+                  <h3 id="tech-loading-text" class="tech-text">Fotoğrafın teknik verisi yükleniyor...</h3>
+                  <div class="tech-progress-bar-wrap">
+                    <div id="tech-progress-fill" class="tech-progress-fill" style="width: 0%;"></div>
+                  </div>
+                  <div class="tech-stats">
+                    <span id="tech-percent">0%</span>
+                    <span id="tech-time-left">25.0s Kaldı</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Technical Details Side Bar -->
+          <div class="tech-details-panel">
+            <div class="panel-head">
+              <h4 id="img-details-title"><i class="fa-solid fa-camera"></i> 1. Revize Fotoğrafı</h4>
+              <p id="img-details-desc">Harita modülü #1 için teknik işleme ve detay doğrulaması yapılmaktadır.</p>
+            </div>
+            
+            <div class="tech-spec-grid">
+              <div class="spec-item">
+                <span class="spec-label">Çözünürlük</span>
+                <span class="spec-val">4K UHD (3840x2160)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Render Motoru</span>
+                <span class="spec-val">Roblox Future Lighting v3</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Polygon Yoğunluğu</span>
+                <span id="spec-poly-val" class="spec-val">1,248,500 Triangles</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Doku Sıkıştırma</span>
+                <span class="spec-val">BC7 DirectX / PBR 16-bit</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Güvenlik Hash</span>
+                <span id="spec-hash-val" class="spec-val">SHA256-NXT-9081</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Durum</span>
+                <span id="spec-status-val" class="spec-val text-warning">Yükleniyor...</span>
+              </div>
+            </div>
+
+            <!-- Action Button to proceed to next photo -->
+            <div class="action-btn-wrap">
+              <button id="next-photo-btn" class="btn-primary" disabled>
+                <span class="btn-text">2. Revize Fotoğrafına Geçmek İçin Tıklayın</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BEKLERKEN OYNAYIN! Mini Game Arcade Container -->
+        <div class="mini-game-section">
+          <div class="mini-game-header">
+            <div class="game-title-box">
+              <i class="fa-solid fa-gamepad text-primary"></i>
+              <h3>BEKLERKEN OYNAYIN! <span>(Roblox Cube Catcher)</span></h3>
+            </div>
+            <div class="game-stats-box">
+              <span class="game-stat"><i class="fa-solid fa-trophy text-warning"></i> Rekor: <strong id="game-highscore">0</strong></span>
+              <span class="game-stat"><i class="fa-solid fa-star text-primary"></i> Skor: <strong id="game-score">0</strong></span>
+              <span class="game-stat"><i class="fa-solid fa-heart text-danger"></i> Can: <span id="game-lives">❤❤❤</span></span>
+            </div>
+          </div>
+          <div class="mini-game-canvas-wrap">
+            <canvas id="mini-game-canvas" width="700" height="240"></canvas>
+            <div id="game-start-overlay" class="game-overlay">
+              <div class="game-overlay-content">
+                <i class="fa-solid fa-cubes game-icon-glow"></i>
+                <h4>Yükleme Yapılırken Eğlenin!</h4>
+                <p>Sol/Sağ ok tuşları veya fare ile bloğu yönetin, düşen Roblox küplerini toplayın, bombalardan kaçının!</p>
+                <button id="start-game-btn" class="btn-primary">
+                  <i class="fa-solid fa-play"></i> Oyunu Başlat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- STAGE 2: 5-Minute 50-Step Roblox Loading Section -->
+      <section id="stage-roblox-loader" class="stage-card hidden">
+        <div class="stage-header text-center">
+          <div class="stage-badge badge-roblox"><i class="fa-solid fa-cubes"></i> ROBLOX SUNUCU YÜKLEMESİ</div>
+          <h2>Harita Aktarımı & Sunucu Derlemesi</h2>
+          <p class="stage-desc">Admin tarafından harita teslimi onaylandı. Dünya verileri 5 dakika içerisinde Roblox sunucularına aktarılıyor.</p>
+        </div>
+
+        <div class="roblox-loader-box">
+          
+          <!-- Live System Metrics Gauges -->
+          <div class="system-gauges-row">
+            <div class="gauge-card">
+              <i class="fa-solid fa-memory text-primary"></i>
+              <div class="gauge-info">
+                <span class="gauge-label">RAM Kullanımı</span>
+                <span id="ram-val" class="gauge-val">2.8 GB / 8.0 GB</span>
+              </div>
+            </div>
+            <div class="gauge-card">
+              <i class="fa-solid fa-network-wired text-accent"></i>
+              <div class="gauge-info">
+                <span class="gauge-label">İndirme Hızı</span>
+                <span id="speed-val" class="gauge-val">168.4 MB/s</span>
+              </div>
+            </div>
+            <div class="gauge-card">
+              <i class="fa-solid fa-server text-warning"></i>
+              <div class="gauge-info">
+                <span class="gauge-label">Roblox Sunucusu</span>
+                <span class="gauge-val">TR-IST-01 (Active)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Countdown Timer Display -->
+          <div class="timer-display">
+            <div class="timer-unit">
+              <span id="timer-min">05</span>
+              <span class="timer-label">DAKİKA</span>
+            </div>
+            <span class="timer-colon">:</span>
+            <div class="timer-unit">
+              <span id="timer-sec">00</span>
+              <span class="timer-label">SANİYE</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar & Step Status -->
+          <div class="main-progress-container">
+            <div class="progress-info-row">
+              <span id="current-step-title" class="step-title"><i class="fa-solid fa-gear fa-spin text-primary"></i> 1/50 - Harita geometrisi yükleniyor...</span>
+              <span id="overall-percentage" class="step-percent">0%</span>
+            </div>
+            <div class="main-progress-bar-bg">
+              <div id="main-progress-fill" class="main-progress-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Terminal Log Console & Interactive Command Line -->
+          <div class="terminal-console-box">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="terminal-title"><i class="fa-solid fa-terminal"></i> NEXTdosyayükleme Console Terminal - Roblox Build Process</span>
+              <span class="terminal-by">by ekonqt</span>
+            </div>
+            <div id="terminal-logs" class="terminal-body">
+              <!-- JS populates logs dynamically here -->
+            </div>
+            <!-- Interactive Terminal Command Line Input -->
+            <div class="terminal-input-bar">
+              <span class="cmd-prompt">ekonqt@next-server:~$</span>
+              <input type="text" id="terminal-cmd-input" placeholder="Komut yazın (örn: help, status, boost, matrix, clear)...">
+              <button id="terminal-cmd-send" class="btn-cmd-send"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+          </div>
+
+          <!-- BEKLERKEN VAKİT GEÇİRİN: 3'LÜ İNTERAKTİF EĞLENCE PANELİ -->
+          <div class="interactive-hub-container">
+            
+            <!-- 1. CYBER SYNTH RADIO PLAYER -->
+            <div class="hub-card synth-radio-card">
+              <div class="hub-card-header">
+                <i class="fa-solid fa-radio text-primary"></i>
+                <h4>BEKLERKEN MÜZİK DİNLEYİN <span>(Cyber Synth Radio)</span></h4>
+              </div>
+              <div class="radio-controls">
+                <select id="radio-channel-select" class="radio-select">
+                  <option value="synthwave">🎵 Track 1: Cyberpunk Synthwave</option>
+                  <option value="lofi">☕ Track 2: Roblox Lofi Chill Beats</option>
+                  <option value="chiptune">⚡ Track 3: 8-Bit Retro Chiptune</option>
+                </select>
+                <button id="radio-play-btn" class="btn-primary btn-radio-play">
+                  <i class="fa-solid fa-play"></i> Müzik Çal
+                </button>
+              </div>
+              <!-- Audio Visualizer Canvas -->
+              <canvas id="radio-visualizer-canvas" width="300" height="50"></canvas>
+            </div>
+
+            <!-- 2. INTERACTIVE 3D MODEL ROTATOR -->
+            <div class="hub-card model-3d-card">
+              <div class="hub-card-header">
+                <i class="fa-solid fa-cube text-accent"></i>
+                <h4>3D HARİTA MESH İNCELE <span>(Fare ile Döndür)</span></h4>
+              </div>
+              <div class="canvas-3d-wrap">
+                <canvas id="canvas-3d-inspector" width="280" height="150"></canvas>
+                <small class="help-text text-center">Farenizi sürükleyerek 3D modeli 360° döndürün</small>
+              </div>
+            </div>
+
+            <!-- 3. ROBLOX TRIVIA QUIZ -->
+            <div class="hub-card quiz-card">
+              <div class="hub-card-header">
+                <i class="fa-solid fa-brain text-warning"></i>
+                <h4>ROBLOX BİLGİ YARIŞMASI <span>(Skor Kazan)</span></h4>
+              </div>
+              <div id="quiz-body" class="quiz-body">
+                <span id="quiz-question-num" class="quiz-num">Soru 1 / 5</span>
+                <p id="quiz-question-text" class="quiz-question">Roblox oyunu ilk kez hangi yılda piyasaya sürülmüştür?</p>
+                <div id="quiz-options-container" class="quiz-options">
+                  <!-- JS inserts option buttons -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- BEKLERKEN OYNAYIN! Mini Game Arcade Container (Stage 2) -->
+          <div class="mini-game-section">
+            <div class="mini-game-header">
+              <div class="game-title-box">
+                <i class="fa-solid fa-gamepad text-primary"></i>
+                <h3>BEKLERKEN OYNAYIN! <span>(Roblox Cube Catcher Arcade)</span></h3>
+              </div>
+              <div class="game-stats-box">
+                <span class="game-stat"><i class="fa-solid fa-trophy text-warning"></i> Rekor: <strong id="game-highscore-s2">0</strong></span>
+                <span class="game-stat"><i class="fa-solid fa-star text-primary"></i> Skor: <strong id="game-score-s2">0</strong></span>
+                <span class="game-stat"><i class="fa-solid fa-heart text-danger"></i> Can: <span id="game-lives-s2">❤❤❤</span></span>
+              </div>
+            </div>
+            <div class="mini-game-canvas-wrap">
+              <canvas id="mini-game-canvas-s2" width="700" height="220"></canvas>
+              <div id="game-start-overlay-s2" class="game-overlay">
+                <div class="game-overlay-content">
+                  <i class="fa-solid fa-gamepad game-icon-glow"></i>
+                  <h4>Uzun Bekleme Süresinde Rekor Kırın!</h4>
+                  <p>Sol/Sağ ok tuşları veya fare ile oyna. Yeşil Roblox küplerini toplayıp yüksek skora ulaşın!</p>
+                  <button id="start-game-btn-s2" class="btn-primary">
+                    <i class="fa-solid fa-play"></i> Oyunu Başlat
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- STAGE 2.5: "Haritada Eksik Var!" 15-Second Diagnostic Fix Loader -->
+      <section id="stage-error-fix" class="stage-card stage-error-card hidden">
+        <div class="stage-header text-center">
+          <div class="stage-badge badge-warning"><i class="fa-solid fa-triangle-exclamation"></i> OTOMATİK TEKNİK TEŞHİS</div>
+          <h2 class="text-warning"><i class="fa-solid fa-triangle-exclamation"></i> HARİTADA EKSİK VE HATA TESPİT EDİLDİ!</h2>
+          <p class="stage-desc">Harita yüklemesi %100 tamamlandı ancak sunucuda 3 adet eksik modül ve kaplama hatası bulundu. 15 saniyelik otomatik onarım ve admin düzeltmesi başlatılıyor...</p>
+        </div>
+
+        <div class="error-fix-box">
+          <div class="error-timer-display">
+            <span id="error-timer-sec">15.0</span>
+            <span class="error-timer-label">SANİYE ONARIM SÜRESİ</span>
+          </div>
+
+          <div class="main-progress-container">
+            <div class="progress-info-row">
+              <span id="error-step-title" class="step-title"><i class="fa-solid fa-wrench fa-spin text-warning"></i> Eksik kaplama ve poligon uyumsuzlukları gideriliyor...</span>
+              <span id="error-percentage" class="step-percent">0%</span>
+            </div>
+            <div class="main-progress-bar-bg">
+              <div id="error-progress-fill" class="main-progress-fill bg-warning" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="error-logs-box" id="error-logs-box">
+            <p><i class="fa-solid fa-bug text-danger"></i> Hata #104: Teras kaplama pürüzü tespit edildi.</p>
+            <p><i class="fa-solid fa-bug text-danger"></i> Hata #105: 2 adet ağaç mesh collision kutusu eksik.</p>
+            <p><i class="fa-solid fa-wrench text-warning"></i> Otomatik sistem ve admin düzeltmesi çalıştırılıyor...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAGE 2.8: USERNAME & 4-DIGIT PIN SECURITY GATE -->
+      <section id="stage-pin-login" class="stage-card stage-pin-card hidden">
+        <div class="congratulations-box">
+          <div class="shield-icon">
+            <i class="fa-solid fa-user-lock"></i>
+          </div>
+          <h2>Harita Onarıldı & Erişime Hazır!</h2>
+          <p>Haritadaki tüm eksik ve hatalar giderildi. Teslimat kupon kodunuza ulaşmak için kullanıcı adınızı ve 4 haneli özel şifrenizi giriniz.</p>
+
+          <form id="user-pin-form" class="pin-gate-form">
+            <div class="form-group">
+              <label for="user-name-input"><i class="fa-solid fa-user"></i> Kullanıcı Adınız (Roblox / İsim)</label>
+              <input type="text" id="user-name-input" placeholder="Kullanıcı adınızı girin..." required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label for="user-pin-input"><i class="fa-solid fa-key"></i> 4 Haneli Özel Şifre</label>
+              <input type="password" id="user-pin-input" maxlength="4" placeholder="•••• (4 Haneli Şifre)" required autocomplete="off">
+            </div>
+
+            <button type="submit" id="submit-pin-btn" class="btn-primary btn-full">
+              <i class="fa-solid fa-shield-check"></i> Kimliği Doğrula & Haritayı Al
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- STAGE 3: Final Coupon Code Card (Unlocked after PIN Verification) -->
+      <section id="stage-coupon" class="stage-card stage-coupon-card hidden">
+        <div class="congratulations-box">
+          <div class="trophy-icon">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <h2>Harita Yüklemesi Başarıyla Tamamlandı!</h2>
+          <p>Tüm 50/50 modül, eksik onarımlar ve <strong id="claimed-username" class="text-primary">Müşteri</strong> kimlik doğrulaması tamamlandı.</p>
+          
+          <div class="coupon-box">
+            <span class="coupon-label">HARİTA TESLİMAT KUPON KODU</span>
+            <div class="coupon-code-wrap">
+              <code id="display-coupon-code">EKONQT-ROBLOX-2026-NXT99</code>
+              <button id="copy-code-btn" class="btn-copy">
+                <i class="fa-regular fa-copy"></i> Kodu Kopyala
+              </button>
+            </div>
+          </div>
+
+          <div class="coupon-notes">
+            <p><i class="fa-solid fa-circle-check text-success"></i> Bu kod ile Roblox Studio veya Harita Sahibi ile iletişime geçerek haritanızı aktif edebilirsiniz.</p>
+            <p><i class="fa-solid fa-shield-halved"></i> Oluşturan: <strong>ekonqt</strong> | NEXTdosyayükleme Altyapısı</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Map Locked Warning (Shown if user tries to jump to loader when status is NOT READY) -->
+      <div id="not-ready-banner" class="banner-not-ready">
+        <div class="banner-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="banner-content">
+          <h4>Harita Teslimatı Şu An Onaylanmadı</h4>
+          <p>Yöneticimiz (ekonqt) haritanın son revizelerini kontrol ediyor. Harita teslimat durumu admin panelinden <strong>HAZIR</strong> yapıldığında 5 dakikalık yükleme süreci ve kupon kodunuz aktif olacaktır.</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2026 <strong>NEXTdosyayükleme</strong> - Güvenli Dosya & Harita Aktarım Sistemi.</p>
+      <p class="footer-sub">Bu web sitesi <span>ekonqt</span> tarafından özel olarak geliştirilmiştir.</p>
+    </footer>
+
+  </div>
+
+  <!-- ZOOM IMAGE MODAL -->
+  <div id="image-zoom-modal" class="modal-overlay hidden">
+    <div class="zoom-modal-card">
+      <button id="close-zoom-btn" class="modal-close-btn">&times;</button>
+      <img id="zoomed-img" src="" alt="Zoomed Photo">
+      <p id="zoomed-caption" class="zoom-caption"></p>
+    </div>
+  </div>
+
+  <!-- LEGAL CONTRACT APPROVAL MODAL (Bölüm Bölüm Onay Metni) -->
+  <div id="legal-modal" class="modal-overlay hidden">
+    <div class="modal-card legal-modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-contract text-primary"></i> Yasal Mutabakat ve İbra Beyannamesi</h3>
+        <span class="legal-step-indicator">Onay: <strong id="legal-approved-count">0</strong> / 4 Madde</span>
+      </div>
+
+      <div class="modal-body legal-modal-body">
+        <div class="legal-intro">
+          <h4>MİMARİ VE TASARIMSAL METODOLOJİ, EŞİK SINIRLANDIRMALARI İLE TEKNİK DEKORASYON UNSURLARININ STATÜSÜNE İLİŞKİN MUTABAKAT VE SORUMLULUK İBRA BEYANNAMESİ</h4>
+          <p>Harita yükleme sürecine geçmeden önce aşağıdaki 4 maddeyi sırasıyla okuyup bölüm bölüm onaylamanız gerekmektedir.</p>
+        </div>
+
+        <!-- Progress Tracker Bar -->
+        <div class="legal-progress-bar-bg">
+          <div id="legal-progress-fill" class="legal-progress-fill" style="width: 0%;"></div>
+        </div>
+
+        <!-- Accordion / Step Cards for Each Madde -->
+        <div class="legal-articles-container">
+          
+          <!-- MADDE 1 -->
+          <div id="madde-card-1" class="madde-card active">
+            <div class="madde-header">
+              <span class="madde-badge">MADDE 1</span>
+              <h5>TARAFLAR, KAPSAM VE SÖZLEŞMEYE KONU DİJİTAL VARLIĞIN NİTELİĞİ</h5>
+              <span id="madde-status-1" class="madde-status-icon"><i class="fa-regular fa-circle"></i></span>
+            </div>
+            <div class="madde-content">
+              <p>İşbu Mutabakat Metni, mimari imalatı ve dijital modellemesi tarafımızca (Geliştirici/Builder) ikmal edilen üç boyutlu harita/mekân tasarımının (bundan böyle "Dijital Varlık" olarak anılacaktır) alıcı tarafa (bundan böyle "Müşteri" olarak anılacaktır) mülkiyet, lisans veya kullanım hakkının devri süreçlerinde, söz konusu Dijital Varlık bünyesinde barındırılan muhtelif geometrik, mimari, topoğrafik ve görsel bileşenlerin teknik ve işlevsel statüsünün tayini amacıyla akdedilmiştir.</p>
+              <button id="btn-approve-madde-1" class="btn-primary btn-madde-approve">
+                <i class="fa-solid fa-check"></i> Madde 1'i Okudum ve Onaylıyorum
+              </button>
+            </div>
+          </div>
+
+          <!-- MADDE 2 -->
+          <div id="madde-card-2" class="madde-card locked">
+            <div class="madde-header">
+              <span class="madde-badge">MADDE 2</span>
+              <h5>FONKSİYONEL OLMAYAN DEKORATİF BİLEŞENLERİN YAPISAL TANIMI</h5>
+              <span id="madde-status-2" class="madde-status-icon"><i class="fa-solid fa-lock"></i></span>
+            </div>
+            <div class="madde-content">
+              <p><strong>2.1.</strong> Dijital Varlık’ın ihtiva ettiği tüm mimari strüktürler, mekânsal kurgular ve topoğrafik detaylar yeknesak bir oynanabilirlik (interaktivite) amacına matuf olarak tasarlanmamıştır. Dijital Varlık dâhilinde yer alan bir kısım mimari elemanlar, obje grupları, dış cephe detayları, sınır ölçekleri ve çevre elemanları; münhasıran görsel algıyı tamamlamak, estetik derinlik sağlamak, tematik temayı pekiştirmek ve atmosferik illüzyon tesis etmek maksadıyla "Statik Süsleme ve Çevresel Arka Plan Unsuru" sıfatıyla entegre edilmiştir.</p>
+              <p><strong>2.2.</strong> Müşteri, işbu metin vasıtasıyla, bahse konu dekoratif ve çevresel unsurların doğrudan doğruya kullanıcı/oyuncu erişimine, fiziksel etkileşimine veya fonksiyonel kullanımına açık olmadığını ve yürünebilir/erişilebilir alan (playable zone) sınırlarının haricinde mutlak bir biçimde konumlandırıldığını peşinen gayrikabili rücu kabul, beyan ve taahhüt eder.</p>
+              <button id="btn-approve-madde-2" class="btn-primary btn-madde-approve" disabled>
+                <i class="fa-solid fa-check"></i> Madde 2'yi Okudum ve Onaylıyorum
+              </button>
+            </div>
+          </div>
+
+          <!-- MADDE 3 -->
+          <div id="madde-card-3" class="madde-card locked">
+            <div class="madde-header">
+              <span class="madde-badge">MADDE 3</span>
+              <h5>MİMARİ/TEKNİK TOLERANSLAR VE KUSUR SAHYİNİN BAZ ALINMAMASI</h5>
+              <span id="madde-status-3" class="madde-status-icon"><i class="fa-solid fa-lock"></i></span>
+            </div>
+            <div class="madde-content">
+              <p><strong>3.1.</strong> Fonksiyonel etkileşim sahasının dışında kalan, salt görsel/dekoratif amaca hizmet eden alanlarda ve objelerde tespit edilebilecek muhtemel poligon kaymaları, mikron düzeydeki mesh/vertex uyumsuzlukları, kaplama (texture) çakışmaları, ışık kırılma sapmaları veya yapım aşamasından kaynaklı teknik ve görsel pürüzler; hiçbir surette "ayıplı hizmet", "eksik teslimat" yahut "teknik kusur" olarak nitelendirilemez ve hukuki/cezai/ticari bir tazminat talebine dayanak oluşturamaz.</p>
+              <p><strong>3.2.</strong> Müşteri, söz konusu dekoratif sahalara üçüncü kişilerin veya nihai kullanıcıların erişim sağlamasını engelleyecek yazılımsal, fiziksel veya sistemsel (sanal sınır/invisible collision barrier vb.) tedbirleri alma yükümlülüğünün tamamen kendisine ait olduğunu; bu alanlara haksız veya öngörülmeyen erişimler neticesinde ortaya çıkabilecek algısal, teknik veya işletimsel aksaklıklardan Geliştirici’nin ari tutulacağını kabul eder.</p>
+              <button id="btn-approve-madde-3" class="btn-primary btn-madde-approve" disabled>
+                <i class="fa-solid fa-check"></i> Madde 3'ü Okudum ve Onaylıyorum
+              </button>
+            </div>
+          </div>
+
+          <!-- MADDE 4 -->
+          <div id="madde-card-4" class="madde-card locked">
+            <div class="madde-header">
+              <span class="madde-badge">MADDE 4</span>
+              <h5>İBRA, MÜTESELSİL TAAHHÜT VE BEYAN</h5>
+              <span id="madde-status-4" class="madde-status-icon"><i class="fa-solid fa-lock"></i></span>
+            </div>
+            <div class="madde-content">
+              <p>Müşteri; işbu beyanname ile tesis edilen teknik sınırlamaları, mimari metodolojiyi ve işlevsel ayırt etme esaslarını eksiksiz şekilde kavradığını, bahse konu dekoratif nitelikteki bölgelerin fonksiyonel olmaması ve bu alanlardaki yapısal pürüzlerin varlığı hususunda tam bir mutabakata vardığını, mezkûr hususlara dayanarak ileride Geliştirici aleyhine herhangi bir teknik revizyon, iade, tazminat veya ayıplı mal iddiası öne sürmeyeceğini kayıtsız, şartsız ve gayrikabili rücu ONAYLADIĞINI kabul ve beyan eder.</p>
+              <button id="btn-approve-madde-4" class="btn-primary btn-madde-approve" disabled>
+                <i class="fa-solid fa-check"></i> Madde 4'ü Okudum ve Onaylıyorum
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="legal-footer-actions">
+          <button id="final-legal-submit-btn" class="btn-primary btn-full btn-legal-final" disabled>
+            <i class="fa-solid fa-shield-halved"></i> MUTABAKAT METNİNİ TAMAMEN ONAYLAYARAK HARİTA YÜKLEMESİNE GEÇ
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN MODAL -->
+  <div id="admin-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-gear"></i> NEXTdosyayükleme Admin Paneli</h3>
+        <button id="close-admin-btn" class="modal-close-btn">&times;</button>
+      </div>
+
+      <!-- Password Login View -->
+      <div id="admin-login-view" class="modal-body">
+        <p class="modal-desc">Yönetim paneline erişmek için admin şifrenizi giriniz.</p>
+        <form id="admin-login-form">
+          <div class="form-group">
+            <label for="admin-pass-input">Admin Şifresi</label>
+            <input type="password" id="admin-pass-input" placeholder="Şifrenizi girin..." required autocomplete="off">
+          </div>
+          <button type="submit" class="btn-primary btn-full">Giriş Yap</button>
+        </form>
+      </div>
+
+      <!-- Admin Control Dashboard View -->
+      <div id="admin-dashboard-view" class="modal-body hidden">
+        
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-toggle-on"></i> Harita Teslimat Durumu</h4>
+          <div class="toggle-control-box">
+            <span class="toggle-label">HARİTA TESLİMİNE:</span>
+            <button id="toggle-ready-btn" class="btn-status-toggle">
+              HAZIR DEĞİL
+            </button>
+          </div>
+          <small class="help-text">"HAZIR" yapıldığında sitede 5 dakikalık Roblox harita yükleme simülasyonu başlatılabilir hale gelir.</small>
+        </div>
+
+        <hr class="divider">
+
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-key"></i> Teslimat Kupon Kodu</h4>
+          <div class="input-with-button">
+            <input type="text" id="admin-code-input" placeholder="Kupon Kodunu Girin...">
+            <button id="save-code-btn" class="btn-secondary">Kaydet</button>
+          </div>
+          <small class="help-text">50/50 yükleme tamamlandığında kullanıcıya gösterilecek kod.</small>
+        </div>
+
+        <hr class="divider">
+
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-triangle-exclamation"></i> Harita Eksik & Hata Yönetimi</h4>
+          <div class="toggle-control-box">
+            <span class="toggle-label">HARİTA DURUMU:</span>
+            <button id="toggle-errors-btn" class="btn-status-toggle not-ready">
+              HARİTADA EKSİK VAR (Açık)
+            </button>
+          </div>
+          <small class="help-text">"Eksik Yok (Düzeltildi)" seçildiğinde 15 saniyelik hata bekletmesi yerine doğrudan 4 haneli PIN giriş ekranına yönlendirilir.</small>
+        </div>
+
+        <hr class="divider">
+
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-lock"></i> 4 Haneli Kullanıcı Şifresi (PIN)</h4>
+          <div class="input-with-button">
+            <input type="text" id="admin-user-pin-input" maxlength="4" placeholder="4 Haneli Şifre (ör: 1234)">
+            <button id="save-user-pin-btn" class="btn-secondary">Kaydet</button>
+          </div>
+          <small class="help-text">Kullanıcının harita tamamlandıktan sonra kupon kodunu açmak için gireceği 4 haneli PIN şifresi.</small>
+        </div>
+
+        <hr class="divider">
+
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-palette"></i> Site Tema Rengi</h4>
+          <div class="theme-picker-row">
+            <button class="theme-chip theme-cyan-chip active" onclick="setSiteTheme('cyan')">Cyan Neon</button>
+            <button class="theme-chip theme-emerald-chip" onclick="setSiteTheme('emerald')">Roblox Emerald</button>
+            <button class="theme-chip theme-purple-chip" onclick="setSiteTheme('purple')">Cyber Purple</button>
+            <button class="theme-chip theme-crimson-chip" onclick="setSiteTheme('crimson')">Crimson Red</button>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-stopwatch"></i> Yükleme Süresi Modu</h4>
+          <div class="duration-options">
+            <button id="dur-900-btn" class="btn-chip">15 Dakika (900 sn)</button>
+            <button id="dur-600-btn" class="btn-chip active">10 Dakika (600 sn - Varsayılan)</button>
+            <button id="dur-300-btn" class="btn-chip">5 Dakika (300 sn)</button>
+            <button id="dur-10-btn" class="btn-chip">10 Saniye (Hızlı Test)</button>
+          </div>
+          <div style="margin-top: 8px;">
+            <button id="admin-instant-finish-btn" class="btn-primary btn-full" style="background: linear-gradient(135deg, #10b981, #059669);">
+              <i class="fa-solid fa-bolt"></i> Harita Yüklemesini Anında Tamamla & Kodu Göster
+            </button>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="admin-section">
+          <h4><i class="fa-solid fa-images"></i> 10 Revize Görselini Yönet</h4>
+          <div id="admin-images-list" class="admin-images-list">
+            <!-- JS generates 10 image configuration cards here -->
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="admin-logout-btn" class="btn-danger-outline">Çıkış Yap</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
