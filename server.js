@@ -11,11 +11,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Ensure public directory exists
+const publicDir = path.join(__dirname, 'public');
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true });
+}
+
 // Storage setup for Multer (image uploads)
-const uploadsDir = path.join(__dirname, 'public', 'uploads');
+const uploadsDir = path.join(publicDir, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -214,7 +221,12 @@ app.post('/api/admin/change-password', authenticateAdmin, (req, res) => {
 
 // Fallback route to serve main app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const indexFile = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(indexFile)) {
+    res.sendFile(indexFile);
+  } else {
+    res.send(`<!DOCTYPE html><html><head><title>NEXTdosyayükleme</title><meta charset="utf-8"></head><body style="background:#07090e;color:#fff;font-family:sans-serif;text-align:center;padding:50px;"><h1>NEXTdosyayükleme</h1><p>ekonqt tarafından yapılmıştır</p><p>Sunucu aktif! Lütfen public/index.html dosyasını GitHub reponuza yükleyin.</p></body></html>`);
+  }
 });
 
 app.listen(PORT, () => {
