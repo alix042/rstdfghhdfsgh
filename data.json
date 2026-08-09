@@ -1,0 +1,70 @@
+{
+  "isReady": true,
+  "couponCode": "EKONQT-ROBLOX-2026-NXT99",
+  "adminPassword": "admin123",
+  "images": [
+    {
+      "id": 1,
+      "title": "1. Revize Harita Detayı",
+      "description": "Harita modülü #1 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_1/900/500"
+    },
+    {
+      "id": 2,
+      "title": "2. Revize Harita Detayı",
+      "description": "Harita modülü #2 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_2/900/500"
+    },
+    {
+      "id": 3,
+      "title": "3. Revize Harita Detayı",
+      "description": "Harita modülü #3 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_3/900/500"
+    },
+    {
+      "id": 4,
+      "title": "4. Revize Harita Detayı",
+      "description": "Harita modülü #4 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_4/900/500"
+    },
+    {
+      "id": 5,
+      "title": "5. Revize Harita Detayı",
+      "description": "Harita modülü #5 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_5/900/500"
+    },
+    {
+      "id": 6,
+      "title": "6. Revize Harita Detayı",
+      "description": "Harita modülü #6 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_6/900/500"
+    },
+    {
+      "id": 7,
+      "title": "7. Revize Harita Detayı",
+      "description": "Harita modülü #7 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_7/900/500"
+    },
+    {
+      "id": 8,
+      "title": "8. Revize Harita Detayı",
+      "description": "Harita modülü #8 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_8/900/500"
+    },
+    {
+      "id": 9,
+      "title": "9. Revize Harita Detayı",
+      "description": "Harita modülü #9 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_9/900/500"
+    },
+    {
+      "id": 10,
+      "title": "10. Revize Harita Detayı",
+      "description": "Harita modülü #10 için teknik işleme ve detay doğrulaması yapılmaktadır.",
+      "url": "https://picsum.photos/seed/roblox_map_10/900/500"
+    }
+  ],
+  "loadingDurationSeconds": 10,
+  "themeColor": "crimson",
+  "activeVisitors": 3
+}
